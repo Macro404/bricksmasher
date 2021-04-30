@@ -6,3 +6,4 @@
 Installation:
 
 Bricksmasher is built using the libGDX framework. This is a gradle project.
+
