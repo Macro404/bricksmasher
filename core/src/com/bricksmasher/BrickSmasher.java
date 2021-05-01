@@ -107,7 +107,7 @@ public class BrickSmasher extends ApplicationAdapter {
 		if(ball.x < 0 || ball.x > 800 - ball.width) {
 			xBallSpeed = -xBallSpeed;
 		}
-		if((ball.x > platform.x && ball.x < platform.x + platform.width) && (ball.y >= platform.y && ball.y <= platform.y + platform.height && yBallSpeed<0)){
+		if(ball.overlaps(platform)){
 			yBallSpeed = -yBallSpeed;
 		}
 		if(ball.y > 480 - ball.height){
