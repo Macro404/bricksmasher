@@ -108,6 +108,7 @@ public class BrickSmasher extends ApplicationAdapter {
 			xBallSpeed = -xBallSpeed;
 		}
 		if(ball.overlaps(platform)){
+			bounceSound.play();
 			yBallSpeed = -yBallSpeed;
 		}
 		if(ball.y > 480 - ball.height){
