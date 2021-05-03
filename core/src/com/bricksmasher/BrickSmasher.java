@@ -25,7 +25,7 @@ public class BrickSmasher extends Game {
 	public void create () {
 		batch = new SpriteBatch();
 
-		font = new BitmapFont(); // use libGDX's default Arial font
+		font = new BitmapFont(Gdx.files.internal("introFont.fnt"), Gdx.files.internal("introFont.png"), false); // use libGDX's default Arial font
 		this.setScreen(new MainMenuScreen(this));
 	}
 

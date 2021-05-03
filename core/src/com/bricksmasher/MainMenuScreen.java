@@ -24,8 +24,8 @@ public class MainMenuScreen implements Screen{
         game.batch.setProjectionMatrix(camera.combined);
 
         game.batch.begin();
-        game.font.draw(game.batch, "Welcome to BricksSmasher!!! ", 100, 150);
-        game.font.draw(game.batch, "Tap anywhere to begin!", 100, 100);
+        game.font.draw(game.batch, "BRICKSMASHER", 230, 300);
+        game.font.draw(game.batch, "Tap anywhere to begin!", 130, 200);
         game.batch.end();
 
         if (Gdx.input.isTouched()) {

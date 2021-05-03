@@ -63,13 +63,13 @@ public class GameScreen implements Screen {
     @Override
     public void render (float delta) {
 
-        ScreenUtils.clear(0.1f, 0.1f, 0.3f, 1);
+        ScreenUtils.clear(0, 0, 0.2f, 1);
         camera.update();
 
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
         game.batch.draw(platformImage, platform.x, platform.y, platform.width, platform.height);
-        game.batch.draw(ballImage, ball.x, ball.y, ball.width, ball.width);
+        game.batch.draw(ballImage, ball.x, ball.y, ball.width, ball.height);
         game.batch.end();
 
         move(camera, platform);
