@@ -17,16 +17,27 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.Game;
 
 
+
 public class BrickSmasher extends Game {
 	public SpriteBatch batch;
 	public BitmapFont font;
+	private GameSettings settings;
+	Music backgroundMusic;
 	
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
+		settings = new GameSettings();
 
-		font = new BitmapFont(); // use libGDX's default Arial font
-		this.setScreen(new MainMenuScreen(this));
+		font = new BitmapFont(Gdx.files.internal("introFont.fnt"), Gdx.files.internal("introFont.png"), false); // use libGDX's default Arial font
+		this.setScreen(new StartScreen(this));
+		backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("musicLoop.wav"));
+
+		backgroundMusic.setLooping(true);
+		backgroundMusic.play();
+	}
+	public GameSettings getSettings(){
+		return this.settings;
 	}
 
 	@Override
@@ -39,5 +50,6 @@ public class BrickSmasher extends Game {
 	public void dispose () {
 		batch.dispose();
 		font.dispose();
+		backgroundMusic.dispose();
 	}
 }
