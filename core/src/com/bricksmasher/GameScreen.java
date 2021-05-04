@@ -45,6 +45,7 @@ public class GameScreen implements Screen {
 
         backgroundMusic.setLooping(true);
 
+
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 480);
 
@@ -140,6 +141,7 @@ public class GameScreen implements Screen {
         }
         if(ball.y + 64 < 0) {
             ball = spawnBall();
+            backgroundMusic.dispose();
             game.setScreen(new MainMenuScreen(game));
         }
     }
