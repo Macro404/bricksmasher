@@ -101,13 +101,38 @@ public class GameScreen implements Screen {
     public void moveBall(){
         ball.x += xBallSpeed * Gdx.graphics.getDeltaTime();
         ball.y += yBallSpeed * Gdx.graphics.getDeltaTime();
+
+        bounce();
+    }
+
+    public void bounce(){
         if(ball.x < 0 || ball.x > 800 - ball.width) {
             bounceSound.play();
             xBallSpeed = -xBallSpeed;
         }
-        if(ball.overlaps(platform)){
+        //Ball is approaching from left and hits left half of platform
+        if(ball.overlaps(platform) && xBallSpeed > 0 &&  ball.x < platform.x + platform.width/2){
             bounceSound.play();
             yBallSpeed = -yBallSpeed;
+            xBallSpeed = -(48 - (ball.x - platform.x)) * 10;
+        }
+        //Ball is approaching from right and hits left half of platform
+        else if(ball.overlaps(platform) && xBallSpeed < 0  && ball.x < platform.x + platform.width/2){
+            bounceSound.play();
+            yBallSpeed = -yBallSpeed;
+            xBallSpeed = -(48 - (ball.x - platform.x)) * 10;
+        }
+        //Ball is approaching from left and hits right half of platform
+        else if(ball.overlaps(platform) && xBallSpeed > 0 && ball.x > platform.x + platform.width/2){
+            bounceSound.play();
+            yBallSpeed = -yBallSpeed;
+            xBallSpeed = (-48 + (ball.x - platform.x)) * 10;
+        }
+        //Ball is approaching from right and hits right half of platform
+        else if(ball.overlaps(platform) && xBallSpeed < 0 && ball.x > platform.x + platform.width/2){
+            bounceSound.play();
+            yBallSpeed = -yBallSpeed;
+            xBallSpeed = (-48 + (ball.x - platform.x)) * 10;
         }
         if(ball.y > 480 - ball.height){
             bounceSound.play();
