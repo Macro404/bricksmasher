@@ -114,25 +114,25 @@ public class GameScreen implements Screen {
         if(ball.overlaps(platform) && xBallSpeed > 0 &&  ball.x < platform.x + platform.width/2){
             bounceSound.play();
             yBallSpeed = -yBallSpeed;
-            xBallSpeed = -(48 - (ball.x - platform.x)) * 10;
+            xBallSpeed = -(platform.width/2 - (ball.x - platform.x)) * 10;
         }
         //Ball is approaching from right and hits left half of platform
         else if(ball.overlaps(platform) && xBallSpeed < 0  && ball.x < platform.x + platform.width/2){
             bounceSound.play();
             yBallSpeed = -yBallSpeed;
-            xBallSpeed = -(48 - (ball.x - platform.x)) * 10;
+            xBallSpeed = -((platform.width/2) - (ball.x - platform.x)) * 10;
         }
         //Ball is approaching from left and hits right half of platform
         else if(ball.overlaps(platform) && xBallSpeed > 0 && ball.x > platform.x + platform.width/2){
             bounceSound.play();
             yBallSpeed = -yBallSpeed;
-            xBallSpeed = (-48 + (ball.x - platform.x)) * 10;
+            xBallSpeed = (-platform.width/2 + (ball.x - platform.x)) * 10;
         }
         //Ball is approaching from right and hits right half of platform
         else if(ball.overlaps(platform) && xBallSpeed < 0 && ball.x > platform.x + platform.width/2){
             bounceSound.play();
             yBallSpeed = -yBallSpeed;
-            xBallSpeed = (-48 + (ball.x - platform.x)) * 10;
+            xBallSpeed = (-platform.width/2 + (ball.x - platform.x)) * 10;
         }
         if(ball.y > 480 - ball.height){
             bounceSound.play();
@@ -140,6 +140,7 @@ public class GameScreen implements Screen {
         }
         if(ball.y + 64 < 0) {
             ball = spawnBall();
+            game.setScreen(new MainMenuScreen(game));
         }
     }
 
