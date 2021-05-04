@@ -23,7 +23,6 @@ public class GameScreen implements Screen {
     Texture ballImage;
     Sound bounceSound;
     Sound breakingBlockSound;
-    Music backgroundMusic;
 
     OrthographicCamera camera;
     Rectangle platform;
@@ -41,9 +40,6 @@ public class GameScreen implements Screen {
 
         bounceSound = Gdx.audio.newSound(Gdx.files.internal("bounceSound.wav"));
         breakingBlockSound = Gdx.audio.newSound(Gdx.files.internal("breakingBlock.wav"));
-        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("musicLoop.wav"));
-
-        backgroundMusic.setLooping(true);
 
 
         camera = new OrthographicCamera();
@@ -114,25 +110,25 @@ public class GameScreen implements Screen {
         //Ball is approaching from left and hits left half of platform
         if(ball.overlaps(platform) && xBallSpeed > 0 &&  ball.x < platform.x + platform.width/2){
             bounceSound.play();
-            yBallSpeed = -yBallSpeed;
+            yBallSpeed = Math.abs(-yBallSpeed);
             xBallSpeed = -(platform.width/2 - (ball.x - platform.x)) * 10;
         }
         //Ball is approaching from right and hits left half of platform
         else if(ball.overlaps(platform) && xBallSpeed < 0  && ball.x < platform.x + platform.width/2){
             bounceSound.play();
-            yBallSpeed = -yBallSpeed;
+            yBallSpeed = Math.abs(-yBallSpeed);
             xBallSpeed = -((platform.width/2) - (ball.x - platform.x)) * 10;
         }
         //Ball is approaching from left and hits right half of platform
         else if(ball.overlaps(platform) && xBallSpeed > 0 && ball.x > platform.x + platform.width/2){
             bounceSound.play();
-            yBallSpeed = -yBallSpeed;
+            yBallSpeed = Math.abs(-yBallSpeed);
             xBallSpeed = (-platform.width/2 + (ball.x - platform.x)) * 10;
         }
         //Ball is approaching from right and hits right half of platform
         else if(ball.overlaps(platform) && xBallSpeed < 0 && ball.x > platform.x + platform.width/2){
             bounceSound.play();
-            yBallSpeed = -yBallSpeed;
+            yBallSpeed = Math.abs(-yBallSpeed);
             xBallSpeed = (-platform.width/2 + (ball.x - platform.x)) * 10;
         }
         if(ball.y > 480 - ball.height){
@@ -141,7 +137,6 @@ public class GameScreen implements Screen {
         }
         if(ball.y + 64 < 0) {
             ball = spawnBall();
-            backgroundMusic.dispose();
             game.setScreen(new MainMenuScreen(game));
         }
     }
@@ -152,9 +147,6 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
-        // start the playback of the background music
-        // when the screen is shown
-        backgroundMusic.play();
     }
 
     @Override
@@ -175,6 +167,5 @@ public class GameScreen implements Screen {
         ballImage.dispose();
         bounceSound.dispose();
         breakingBlockSound.dispose();
-        backgroundMusic.dispose();
     }
 }

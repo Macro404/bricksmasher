@@ -34,13 +34,6 @@ public class MainMenuScreen implements Screen{
         this.game = game;
 
         stage = new Stage(new ScreenViewport());
-        Gdx.input.setInputProcessor(stage);
-
-
-        //camera = new OrthographicCamera();
-        //camera.setToOrtho(false, 800, 480);
-        // Create a table that fills the screen. Everything else will go inside this table.
-
     }
 
     @Override
@@ -75,6 +68,8 @@ public class MainMenuScreen implements Screen{
 
     @Override
     public void show() {
+
+        Gdx.input.setInputProcessor(stage);
         Table table = new Table();
         table.setFillParent(true);
         //table.setDebug(true);
