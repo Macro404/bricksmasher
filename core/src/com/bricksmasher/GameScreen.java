@@ -21,6 +21,7 @@ public class GameScreen implements Screen {
 
     Texture platformImage;
     Texture ballImage;
+    Texture brickImage;
     Sound bounceSound;
     Sound breakingBlockSound;
 
@@ -28,6 +29,7 @@ public class GameScreen implements Screen {
     Rectangle platform;
 
     Rectangle ball;
+    Rectangle brick;
     float xBallSpeed;
     float yBallSpeed;
 
@@ -37,6 +39,8 @@ public class GameScreen implements Screen {
         this.game = game;
         platformImage = new Texture(Gdx.files.internal("platform.png"));
         ballImage = new Texture(Gdx.files.internal("ball.png"));
+        brickImage = new Texture(Gdx.files.internal("brick.png"));
+
 
         bounceSound = Gdx.audio.newSound(Gdx.files.internal("bounceSound.wav"));
         breakingBlockSound = Gdx.audio.newSound(Gdx.files.internal("breakingBlock.wav"));
@@ -50,6 +54,12 @@ public class GameScreen implements Screen {
         platform.y = 20;
         platform.width = 96;
         platform.height = 18;
+
+        brick = new Rectangle();
+        brick.x = 800/2 - 64 / 2;
+        brick.y = 400;
+        brick.width = 50;
+        brick.height = 30;
 
         xBallSpeed = (-200);
         yBallSpeed = (-200);
@@ -67,6 +77,7 @@ public class GameScreen implements Screen {
         game.batch.begin();
         game.batch.draw(platformImage, platform.x, platform.y, platform.width, platform.height);
         game.batch.draw(ballImage, ball.x, ball.y, ball.width, ball.height);
+        game.batch.draw(brickImage, brick.x, brick.y, brick.width, brick.height);
         game.batch.end();
 
         move(camera, platform);
@@ -130,6 +141,11 @@ public class GameScreen implements Screen {
             bounceSound.play();
             yBallSpeed = Math.abs(-yBallSpeed);
             xBallSpeed = (-platform.width/2 + (ball.x - platform.x)) * 10;
+        }
+        if(ball.overlaps(brick)){
+            breakingBlockSound.play();
+            yBallSpeed = -yBallSpeed;
+            brick = null;
         }
         if(ball.y > 480 - ball.height){
             bounceSound.play();
