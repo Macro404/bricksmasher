@@ -24,6 +24,7 @@ public class GameScreen implements Screen {
     Texture brickImage;
     Sound bounceSound;
     Sound breakingBlockSound;
+    private Array<Rectangle> bricks;
 
     OrthographicCamera camera;
     Rectangle platform;
