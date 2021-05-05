@@ -83,10 +83,14 @@ public class GameScreen implements Screen {
             //    bricks.dispose();
             //}
             //else{
-                game.batch.draw(brickImage, brick.x, brick.y, brick.width, brick.height);
+                //game.batch.draw(brickImage, brick.x, brick.y, brick.width, brick.height);
             //}
-            game.batch.end();
+            //game.batch.end();
         //}
+        if(brick != null){
+            game.batch.draw(brickImage, brick.x, brick.y, brick.width, brick.height);
+        }
+        game.batch.end();
 
 
         move(camera, platform);
@@ -151,7 +155,7 @@ public class GameScreen implements Screen {
             yBallSpeed = Math.abs(-yBallSpeed);
             xBallSpeed = (-platform.width/2 + (ball.x - platform.x)) * 10;
         }
-        if(ball.overlaps(brick)){
+        if(brick !=null && ball.overlaps(brick)){
             breakingBlockSound.play();
             yBallSpeed = -yBallSpeed;
             brick = null;
