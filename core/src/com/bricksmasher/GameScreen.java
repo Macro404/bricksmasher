@@ -15,6 +15,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
+import java.util.Iterator;
 
 public class GameScreen implements Screen {
     final BrickSmasher game;
@@ -69,16 +70,19 @@ public class GameScreen implements Screen {
     public void spawnBricks(){
         int i = 0;
         int j = 1;
-        while(i < 6){
+        while(j < 8){
             brick = new Rectangle();
-            brick.x = (800 / 2 - 64 / 2) + (50*i % 500);
-            brick.y = 400 + (30*j % 300);
+            brick.x = (800 / 2 - 64 / 2) - (50*i % 500);
+            brick.y = 400 - (30*j % 300);
             brick.width = 50;
             brick.height = 30;
-            //if(i % j == 0){
-              //  j = j + 1;
-            //}
-            i = i + 1;
+            if(i % j == 0){
+                j = j + 1;
+                i = 1;
+            }
+            else {
+                i = i + 1;
+            }
             bricks.add(brick);
         }
     }
@@ -95,18 +99,18 @@ public class GameScreen implements Screen {
         game.batch.draw(ballImage, ball.x, ball.y, ball.width, ball.height);
         for(Rectangle brick : bricks){
             if(brick == null){
-                //brick.remove();
             }
             else{
                 game.batch.draw(brickImage, brick.x, brick.y, brick.width, brick.height);
             }
-            game.batch.end();
         }
         //if(brick != null){
           //  game.batch.draw(brickImage, brick.x, brick.y, brick.width, brick.height);
         //}
         //game.batch.end();
 
+
+        game.batch.end();
 
         move(camera, platform);
         moveBall();
@@ -170,13 +174,28 @@ public class GameScreen implements Screen {
             yBallSpeed = Math.abs(-yBallSpeed);
             xBallSpeed = (-platform.width/2 + (ball.x - platform.x)) * 10;
         }
-        for(Rectangle brick : bricks) {
-            if (brick != null && ball.overlaps(brick)) {
+        for (Iterator<Rectangle> iter = bricks.iterator(); iter.hasNext(); ) {
+            Rectangle brick = iter.next();
+            if(ball.overlaps(brick)){
                 breakingBlockSound.play();
                 yBallSpeed = -yBallSpeed;
-                brick = null;
+                iter.remove();
             }
         }
+        //for(int i = 0; i < bricks.size; i++) {
+          //  if (bricks.get(i) != null && ball.overlaps(bricks.get(i))) {
+            //    breakingBlockSound.play();
+              //  yBallSpeed = -yBallSpeed;
+               // bricks.set(i, null);
+            //}
+        //}
+        //for(Rectangle brick : bricks) {
+          //  if (brick != null && ball.overlaps(brick)) {
+            //    breakingBlockSound.play();
+            //    yBallSpeed = -yBallSpeed;
+            //    brick = null;
+            //}
+        //}
 
         if(ball.y > 480 - ball.height){
             bounceSound.play();
