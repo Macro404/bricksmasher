@@ -78,8 +78,16 @@ public class GameScreen implements Screen {
         game.batch.begin();
         game.batch.draw(platformImage, platform.x, platform.y, platform.width, platform.height);
         game.batch.draw(ballImage, ball.x, ball.y, ball.width, ball.height);
-        game.batch.draw(brickImage, brick.x, brick.y, brick.width, brick.height);
-        game.batch.end();
+        //for(brick : bricks){
+          //  if(brick == null){
+            //    bricks.dispose();
+            //}
+            //else{
+                game.batch.draw(brickImage, brick.x, brick.y, brick.width, brick.height);
+            //}
+            game.batch.end();
+        //}
+
 
         move(camera, platform);
         moveBall();
@@ -148,6 +156,7 @@ public class GameScreen implements Screen {
             yBallSpeed = -yBallSpeed;
             brick = null;
         }
+
         if(ball.y > 480 - ball.height){
             bounceSound.play();
             yBallSpeed = -yBallSpeed;
