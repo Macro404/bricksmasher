@@ -12,9 +12,17 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+
 import java.util.Iterator;
 
 public class GameScreen implements Screen {
@@ -32,6 +40,7 @@ public class GameScreen implements Screen {
     Rectangle brick;
     float xBallSpeed;
     float yBallSpeed;
+    Stage stage;
 
     int currentScore;
 
@@ -58,6 +67,7 @@ public class GameScreen implements Screen {
         yBallSpeed = (-200);
 
         ball = spawnBall();
+        stage = new Stage(new ScreenViewport());
     }
 
     public void spawnBricks(){
@@ -100,6 +110,9 @@ public class GameScreen implements Screen {
 
         move(camera, platform);
         moveBall();
+
+        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        stage.draw();
     }
 
     public void move(Camera camera, Rectangle platform){
@@ -214,6 +227,24 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
+        Gdx.input.setInputProcessor(stage);
+        Table table = new Table();
+        table.setFillParent(true);
+        table.top();
+        table.right();
+        stage.addActor(table);
+
+        Skin skin = new Skin(Gdx.files.internal("skin/neon-ui.json"));
+
+        TextButton menu = new TextButton("Menu", skin);
+        table.add(menu).width(65).height(45);
+        menu.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.setScreen(new MainMenuScreen(game));
+                dispose();
+            }
+        });
     }
 
     @Override

@@ -33,7 +33,7 @@ public class StartScreen implements Screen{
 
         game.batch.begin();
         game.font.draw(game.batch, "BRICKSMASHER", 230, 300);
-        game.font.draw(game.batch, "Tap anywhere to begin!", 130, 200);
+        game.font.draw(game.batch, "Click anywhere to begin!", 130, 200);
         game.batch.end();
 
         if (Gdx.input.isTouched()) {

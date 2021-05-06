@@ -40,6 +40,7 @@ public class BrickSmasher extends Game {
 		this.setScreen(new StartScreen(this));
 		backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("musicLoop.wav"));
 
+		backgroundMusic.setVolume(getSettings().getMusicVolume());
 		backgroundMusic.setLooping(true);
 		backgroundMusic.play();
 	}
