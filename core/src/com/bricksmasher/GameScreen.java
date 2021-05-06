@@ -68,15 +68,15 @@ public class GameScreen implements Screen {
     }
 
     public void spawnBricks(){
-        int i = 0;
+        int i = 1;
         int j = 1;
-        while(j < 8){
+        while(j < 10){
             brick = new Rectangle();
-            brick.x = (800 / 2 - 64 / 2) - (50*i % 500);
+            brick.x = (800 / 2 - 64 / 2) + (50*i % 500);
             brick.y = 400 - (30*j % 300);
             brick.width = 50;
             brick.height = 30;
-            if(i % j == 0){
+            if(i % 9 == 0){
                 j = j + 1;
                 i = 1;
             }
