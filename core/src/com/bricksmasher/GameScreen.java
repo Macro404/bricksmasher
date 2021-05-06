@@ -68,17 +68,17 @@ public class GameScreen implements Screen {
     }
 
     public void spawnBricks(){
-        int i = 1;
-        int j = 1;
-        while(j < 10){
+        int i = 0;
+        int j = 0;
+        while(j < 6){
             brick = new Rectangle();
-            brick.x = (800 / 2 - 64 / 2) + (50*i % 500);
-            brick.y = 400 - (30*j % 300);
+            brick.x =50*i;
+            brick.y = 420 - (30*j);
             brick.width = 50;
             brick.height = 30;
-            if(i % 9 == 0){
+            if(i != 0 && i % 15 == 0){
                 j = j + 1;
-                i = 1;
+                i = 0;
             }
             else {
                 i = i + 1;
@@ -98,17 +98,10 @@ public class GameScreen implements Screen {
         game.batch.draw(platformImage, platform.x, platform.y, platform.width, platform.height);
         game.batch.draw(ballImage, ball.x, ball.y, ball.width, ball.height);
         for(Rectangle brick : bricks){
-            if(brick == null){
-            }
-            else{
+            if(brick != null){
                 game.batch.draw(brickImage, brick.x, brick.y, brick.width, brick.height);
             }
         }
-        //if(brick != null){
-          //  game.batch.draw(brickImage, brick.x, brick.y, brick.width, brick.height);
-        //}
-        //game.batch.end();
-
 
         game.batch.end();
 
@@ -135,7 +128,7 @@ public class GameScreen implements Screen {
         ball.width = 12;
         ball.height = 12;
         ball.x = 200/2 - ball.width;
-        ball.y = 320;
+        ball.y = 250;
         return ball;
     }
     public void moveBall(){

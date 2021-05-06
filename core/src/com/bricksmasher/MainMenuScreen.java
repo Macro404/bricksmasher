@@ -72,7 +72,6 @@ public class MainMenuScreen implements Screen{
         Gdx.input.setInputProcessor(stage);
         Table table = new Table();
         table.setFillParent(true);
-        //table.setDebug(true);
         stage.addActor(table);
 
         Skin skin = new Skin(Gdx.files.internal("skin/neon-ui.json"));
@@ -97,12 +96,14 @@ public class MainMenuScreen implements Screen{
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 changeScreen(GAME);
+                dispose();
             }
         });
         settings.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 changeScreen(SETTINGS);
+                dispose();
             }
         });
     }
