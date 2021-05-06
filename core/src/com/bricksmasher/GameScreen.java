@@ -171,7 +171,8 @@ public class GameScreen implements Screen {
             Rectangle brick = iter.next();
             if(ball.overlaps(brick)){
                 breakingBlockSound.play();
-                yBallSpeed = -yBallSpeed;
+                yBallSpeed = (-brick.height/2 + (ball.y - brick.y)) * 10;;
+                xBallSpeed = (-brick.width/2 + (ball.x - brick.x)) * 10;
                 iter.remove();
             }
         }
