@@ -53,7 +53,7 @@ public class SettingsScreen implements Screen{
         volumeMusicSlider.addListener( new EventListener() {
             @Override
             public boolean handle(Event event) {
-                parent.getSettings().setMusicVolume( volumeMusicSlider.getValue() );
+                parent.backgroundMusic.setVolume(volumeMusicSlider.getValue());
                 return false;
             }
         });
@@ -64,20 +64,25 @@ public class SettingsScreen implements Screen{
             @Override
             public boolean handle(Event event) {
                 boolean enabled = musicCheckbox.isChecked();
-                parent.getSettings().setMusicEnabled( enabled );
+                if(enabled){
+                    parent.backgroundMusic.play();
+                }
+                else{
+                    parent.backgroundMusic.stop();
+                }
                 return false;
             }
         });
-        final Slider soundMusicSlider = new Slider(0f, 1f, 0.1f, false, skin);
-        soundMusicSlider.setValue(parent.getSettings().getSoundVolume());
-        soundMusicSlider.addListener(new EventListener() {
+        final Slider soundSlider = new Slider(0f, 1f, 0.1f, false, skin);
+        soundSlider.setValue(parent.getSettings().getSoundVolume());
+        soundSlider.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
-                parent.getSettings().setSoundVolume(soundMusicSlider.getValue());
+                parent.getSettings().setSoundVolume(soundSlider.getValue());
                 return false;
             }
         });
-        final TextButton backButton = new TextButton("Back", skin); // the extra argument here "small" is used to set the button to the smaller version instead of the big default version
+        final TextButton backButton = new TextButton("Back", skin);
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -91,6 +96,12 @@ public class SettingsScreen implements Screen{
             public boolean handle(Event event) {
                 boolean enabled = soundEffectsCheckbox.isChecked();
                 parent.getSettings().setSoundEffectsEnabled(enabled);
+                if(enabled){
+                    parent.soundEnabled = true;
+                }
+                else{
+                    parent.soundEnabled = false;
+                }
                 return false;
             }
         });
@@ -110,7 +121,7 @@ public class SettingsScreen implements Screen{
         table.add(musicCheckbox);
         table.row().pad(10,0,0,10);
         table.add(volumeSoundLabel).left();
-        table.add(soundMusicSlider);
+        table.add(soundSlider);
         table.row().pad(10,0,0,10);
         table.add(soundOnOffLabel).left();
         table.add(soundEffectsCheckbox);

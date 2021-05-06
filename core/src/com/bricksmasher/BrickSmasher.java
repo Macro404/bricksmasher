@@ -22,7 +22,10 @@ public class BrickSmasher extends Game {
 	public SpriteBatch batch;
 	public BitmapFont font;
 	private GameSettings settings;
-	Music backgroundMusic;
+	public Music backgroundMusic;
+	public Sound bounceSound;
+	public Sound breakingBlockSound;
+	public boolean soundEnabled;
 	
 	@Override
 	public void create () {
@@ -30,6 +33,10 @@ public class BrickSmasher extends Game {
 		settings = new GameSettings();
 
 		font = new BitmapFont(Gdx.files.internal("introFont.fnt"), Gdx.files.internal("introFont.png"), false); // use libGDX's default Arial font
+		bounceSound = Gdx.audio.newSound(Gdx.files.internal("bounceSound.wav"));
+		breakingBlockSound = Gdx.audio.newSound(Gdx.files.internal("breakingBlock.wav"));
+		soundEnabled = getSettings().isSoundEffectsEnabled();
+
 		this.setScreen(new StartScreen(this));
 		backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("musicLoop.wav"));
 
@@ -51,5 +58,7 @@ public class BrickSmasher extends Game {
 		batch.dispose();
 		font.dispose();
 		backgroundMusic.dispose();
+		breakingBlockSound.dispose();
+		bounceSound.dispose();
 	}
 }
