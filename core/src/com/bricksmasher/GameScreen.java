@@ -4,11 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
@@ -32,6 +34,7 @@ public class GameScreen implements Screen {
     Texture ballImage;
     Texture brickImage;
     private Array<Rectangle> bricks;
+    ParticleEffect blockDestruction;
 
     OrthographicCamera camera;
     Rectangle platform;
@@ -41,6 +44,9 @@ public class GameScreen implements Screen {
     float xBallSpeed;
     float yBallSpeed;
     Stage stage;
+    boolean brokenBlock;
+    float explosionx;
+    float explosiony;
 
     int currentScore;
 
@@ -49,6 +55,8 @@ public class GameScreen implements Screen {
         platformImage = new Texture(Gdx.files.internal("platform.png"));
         ballImage = new Texture(Gdx.files.internal("ball.png"));
         brickImage = new Texture(Gdx.files.internal("brick.png"));
+        blockDestruction = new ParticleEffect();
+        blockDestruction.load(Gdx.files.internal("sparks.p"), Gdx.files.internal("Effects"));
 
 
         camera = new OrthographicCamera();
@@ -93,7 +101,7 @@ public class GameScreen implements Screen {
     @Override
     public void render (float delta) {
 
-        ScreenUtils.clear(0, 0, 0.2f, 1);
+        ScreenUtils.clear(0, 0, 0.1f, 1);
         camera.update();
 
         game.batch.setProjectionMatrix(camera.combined);
@@ -105,6 +113,9 @@ public class GameScreen implements Screen {
                 game.batch.draw(brickImage, brick.x, brick.y, brick.width, brick.height);
             }
         }
+
+        blockDestruction.setPosition(explosionx, explosiony);
+        blockDestruction.draw(game.batch, Math.min(Gdx.graphics.getDeltaTime(), 1/90f));
 
         game.batch.end();
 
@@ -189,8 +200,11 @@ public class GameScreen implements Screen {
                 if(game.soundEnabled) {
                     game.breakingBlockSound.play(game.getSettings().getSoundVolume());
                 }
-                yBallSpeed = (-brick.height/2 + (ball.y - brick.y)) * 10;;
+                yBallSpeed = (-brick.height/2 + (ball.y - brick.y)) * 10;
                 xBallSpeed = (-brick.width/2 + (ball.x - brick.x)) * 10;
+                explosionx = brick.x + brick.width/2;
+                explosiony = brick.y + brick.height/2;
+                blockDestruction.start();
                 iter.remove();
             }
         }
