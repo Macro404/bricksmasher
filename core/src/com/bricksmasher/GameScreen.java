@@ -23,8 +23,6 @@ public class GameScreen implements Screen {
     Texture platformImage;
     Texture ballImage;
     Texture brickImage;
-    Sound bounceSound;
-    Sound breakingBlockSound;
     private Array<Rectangle> bricks;
 
     OrthographicCamera camera;
@@ -44,10 +42,6 @@ public class GameScreen implements Screen {
         brickImage = new Texture(Gdx.files.internal("brick.png"));
 
 
-        bounceSound = Gdx.audio.newSound(Gdx.files.internal("bounceSound.wav"));
-        breakingBlockSound = Gdx.audio.newSound(Gdx.files.internal("breakingBlock.wav"));
-
-
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 480);
 
@@ -57,7 +51,6 @@ public class GameScreen implements Screen {
         platform.width = 96;
         platform.height = 18;
 
-        // create the raindrops array and spawn the first raindrop
         bricks = new Array<Rectangle>();
         spawnBricks();
 
@@ -140,37 +133,49 @@ public class GameScreen implements Screen {
 
     public void bounce(){
         if(ball.x < 0 || ball.x > 800 - ball.width) {
-            bounceSound.play();
+            if(game.soundEnabled){
+                game.bounceSound.play(game.getSettings().getSoundVolume());
+            }
             xBallSpeed = -xBallSpeed;
         }
         //Ball is approaching from left and hits left half of platform
         if(ball.overlaps(platform) && xBallSpeed > 0 &&  ball.x < platform.x + platform.width/2){
-            bounceSound.play();
+            if(game.soundEnabled){
+                game.bounceSound.play(game.getSettings().getSoundVolume());
+            }
             yBallSpeed = Math.abs(-yBallSpeed);
             xBallSpeed = -(platform.width/2 - (ball.x - platform.x)) * 10;
         }
         //Ball is approaching from right and hits left half of platform
         else if(ball.overlaps(platform) && xBallSpeed < 0  && ball.x < platform.x + platform.width/2){
-            bounceSound.play();
+            if(game.soundEnabled){
+                game.bounceSound.play(game.getSettings().getSoundVolume());
+            }
             yBallSpeed = Math.abs(-yBallSpeed);
             xBallSpeed = -((platform.width/2) - (ball.x - platform.x)) * 10;
         }
         //Ball is approaching from left and hits right half of platform
         else if(ball.overlaps(platform) && xBallSpeed > 0 && ball.x > platform.x + platform.width/2){
-            bounceSound.play();
+            if(game.soundEnabled){
+                game.bounceSound.play(game.getSettings().getSoundVolume());
+            }
             yBallSpeed = Math.abs(-yBallSpeed);
             xBallSpeed = (-platform.width/2 + (ball.x - platform.x)) * 10;
         }
         //Ball is approaching from right and hits right half of platform
         else if(ball.overlaps(platform) && xBallSpeed < 0 && ball.x > platform.x + platform.width/2){
-            bounceSound.play();
+            if(game.soundEnabled) {
+                game.bounceSound.play(game.getSettings().getSoundVolume());
+            }
             yBallSpeed = Math.abs(-yBallSpeed);
             xBallSpeed = (-platform.width/2 + (ball.x - platform.x)) * 10;
         }
         for (Iterator<Rectangle> iter = bricks.iterator(); iter.hasNext(); ) {
             Rectangle brick = iter.next();
             if(ball.overlaps(brick)){
-                breakingBlockSound.play();
+                if(game.soundEnabled) {
+                    game.breakingBlockSound.play(game.getSettings().getSoundVolume());
+                }
                 yBallSpeed = (-brick.height/2 + (ball.y - brick.y)) * 10;;
                 xBallSpeed = (-brick.width/2 + (ball.x - brick.x)) * 10;
                 iter.remove();
@@ -192,7 +197,9 @@ public class GameScreen implements Screen {
         //}
 
         if(ball.y > 480 - ball.height){
-            bounceSound.play();
+            if(game.soundEnabled){
+                game.bounceSound.play(game.getSettings().getSoundVolume());
+            }
             yBallSpeed = -yBallSpeed;
         }
         if(ball.y + 64 < 0) {
@@ -225,7 +232,5 @@ public class GameScreen implements Screen {
     public void dispose () {
         platformImage.dispose();
         ballImage.dispose();
-        bounceSound.dispose();
-        breakingBlockSound.dispose();
     }
 }
