@@ -29,6 +29,7 @@ import java.util.Iterator;
 
 public class GameScreen implements Screen {
     final BrickSmasher game;
+    GameScreen gameScreen = this;
 
     Texture platformImage;
     Texture ballImage;
@@ -52,11 +53,11 @@ public class GameScreen implements Screen {
 
     public GameScreen(final BrickSmasher game){
         this.game = game;
-        platformImage = new Texture(Gdx.files.internal("platform.png"));
+        /*platformImage = new Texture(Gdx.files.internal("platform.png"));
         ballImage = new Texture(Gdx.files.internal("ball.png"));
         brickImage = new Texture(Gdx.files.internal("brick.png"));
         blockDestruction = new ParticleEffect();
-        blockDestruction.load(Gdx.files.internal("sparks.p"), Gdx.files.internal("Effects"));
+        blockDestruction.load(Gdx.files.internal("sparks.p"), Gdx.files.internal("Effects"));*/
         level = 1;
 
         camera = new OrthographicCamera();
@@ -83,6 +84,9 @@ public class GameScreen implements Screen {
         int j = 0;
         int numrows = 2;
         switch (level){
+            case 1:
+                numrows = 2;
+                break;
             case 2:
                 numrows = 3;
                 break;
@@ -96,6 +100,7 @@ public class GameScreen implements Screen {
                 numrows = 6;
                 break;
             default:
+                numrows = 6;
                 break;
         }
         while(j < numrows){
@@ -144,8 +149,11 @@ public class GameScreen implements Screen {
 
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
-        if(bricks.size == 0){
+        if(bricks.size == 0 && level != 5){
             game.setScreen(new NextLevelScreen(game, this));
+        }
+        if(bricks.size == 0 && level == 5){
+            game.setScreen(new WinScreen(game, currentScore, this));
         }
     }
 
@@ -277,10 +285,15 @@ public class GameScreen implements Screen {
         menu.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new MainMenuScreen(game));
+                game.setScreen(new MainMenuScreen(game, gameScreen));
                 dispose();
             }
         });
+        platformImage = new Texture(Gdx.files.internal("platform.png"));
+        ballImage = new Texture(Gdx.files.internal("ball.png"));
+        brickImage = new Texture(Gdx.files.internal("brick.png"));
+        blockDestruction = new ParticleEffect();
+        blockDestruction.load(Gdx.files.internal("sparks.p"), Gdx.files.internal("Effects"));
     }
 
     @Override

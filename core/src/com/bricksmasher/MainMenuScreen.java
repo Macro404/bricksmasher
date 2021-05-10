@@ -27,11 +27,14 @@ public class MainMenuScreen implements Screen{
     public final static int MENU = 0;
     public final static int SETTINGS = 1;
     public final static int GAME = 2;
+    public final static int CONTINUE = 3;
 
 
 
-    public MainMenuScreen(final BrickSmasher game){
+
+    public MainMenuScreen(final BrickSmasher game, GameScreen gameScreen){
         this.game = game;
+        this.gameScreen = gameScreen;
 
         stage = new Stage(new ScreenViewport());
     }
@@ -47,17 +50,20 @@ public class MainMenuScreen implements Screen{
 
     public void changeScreen(int screen){
         switch(screen){
+            case CONTINUE:
+                if(gameScreen == null) gameScreen = new GameScreen(game);
+                game.setScreen(gameScreen);
+                break;
             case MENU:
-                if(mainMenuScreen == null) mainMenuScreen = new MainMenuScreen(game);
+                if(mainMenuScreen == null) mainMenuScreen = new MainMenuScreen(game, gameScreen);
                 game.setScreen(mainMenuScreen);
                 break;
             case SETTINGS:
-                if(settingsScreen == null) settingsScreen = new SettingsScreen(game);
+                if(settingsScreen == null) settingsScreen = new SettingsScreen(game, gameScreen);
                 game.setScreen(settingsScreen);
                 break;
             case GAME:
-                if(gameScreen == null) gameScreen = new GameScreen(game);
-                game.setScreen(gameScreen);
+                game.setScreen(new GameScreen(game));
                 break;
         }
     }
@@ -76,10 +82,13 @@ public class MainMenuScreen implements Screen{
 
         Skin skin = new Skin(Gdx.files.internal("skin/neon-ui.json"));
 
+        TextButton continueGame = new TextButton("Continue", skin);
         TextButton newGame = new TextButton("New Game", skin);
         TextButton settings = new TextButton("Settings", skin);
         TextButton exit = new TextButton("Exit", skin);
 
+        table.add(continueGame).fillX().uniformX().width(300).height(80);
+        table.row();
         table.add(newGame).fillX().uniformX().width(300).height(80);
         table.row().pad(0, 0, 0, 0);
         table.add(settings).fillX().uniformX().width(300).height(80);
@@ -103,6 +112,13 @@ public class MainMenuScreen implements Screen{
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 changeScreen(SETTINGS);
+                dispose();
+            }
+        });
+        continueGame.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                changeScreen(CONTINUE);
                 dispose();
             }
         });

@@ -11,18 +11,19 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-public class NextLevelScreen implements Screen {
+public class WinScreen implements Screen {
+    int score;
+    Stage stage;
     BrickSmasher game;
     GameScreen gameScreen;
-    Stage stage;
-
-    public NextLevelScreen(BrickSmasher game, GameScreen gameScreen){
+    public WinScreen(BrickSmasher game, int score, GameScreen gameScreen){
         this.game = game;
+        this.score = score;
         this.gameScreen = gameScreen;
+        game.font.getData().setScale(1.0f);
 
         stage = new Stage(new ScreenViewport());
     }
-
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
@@ -32,10 +33,18 @@ public class NextLevelScreen implements Screen {
 
         Skin skin = new Skin(Gdx.files.internal("skin/neon-ui.json"));
 
-        TextButton nextLevel = new TextButton("Next Level", skin);
-
-        table.add(nextLevel).fillX().uniformX().width(300).height(80);
-        nextLevel.addListener(new ChangeListener() {
+        TextButton mainMenu = new TextButton("Menu", skin);
+        TextButton keepPlaying = new TextButton("Keep playing", skin);
+        table.padTop(30);
+        table.add(mainMenu).fillX().uniformX().width(300).height(80);
+        table.add(keepPlaying).fillX().uniformX().width(300).height(80);
+        mainMenu.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.setScreen(new MainMenuScreen(game, gameScreen));
+            }
+        });
+        keepPlaying.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 gameScreen.level += 1;
@@ -45,6 +54,7 @@ public class NextLevelScreen implements Screen {
                 dispose();
             }
         });
+
     }
 
     @Override
@@ -52,7 +62,7 @@ public class NextLevelScreen implements Screen {
         ScreenUtils.clear(0, 0, 0.1f, 1);
 
         game.batch.begin();
-        game.font.draw(game.batch, "Level " + gameScreen.level + " complete", 280, 300);
+        game.font.draw(game.batch, "Game completed!", 220, 300);
         game.batch.end();
 
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
@@ -81,6 +91,6 @@ public class NextLevelScreen implements Screen {
 
     @Override
     public void dispose() {
-        stage.dispose();
+
     }
 }

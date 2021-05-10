@@ -28,10 +28,12 @@ public class SettingsScreen implements Screen{
     private Label soundOnOffLabel;
 
     private MainMenuScreen mainMenuScreen;
+    GameScreen gameScreen;
 
-    public SettingsScreen(BrickSmasher game){
+    public SettingsScreen(BrickSmasher game, GameScreen gameScreen){
         parent = game;
-        mainMenuScreen = new MainMenuScreen(game);
+        this.gameScreen = gameScreen;
+        mainMenuScreen = new MainMenuScreen(game, gameScreen);
 
         stage = new Stage(new ScreenViewport());
     }
