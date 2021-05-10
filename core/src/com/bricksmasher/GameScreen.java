@@ -9,12 +9,21 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+
 import java.util.Iterator;
 
 public class GameScreen implements Screen {
@@ -23,9 +32,8 @@ public class GameScreen implements Screen {
     Texture platformImage;
     Texture ballImage;
     Texture brickImage;
-    Sound bounceSound;
-    Sound breakingBlockSound;
     private Array<Rectangle> bricks;
+    ParticleEffect blockDestruction;
 
     OrthographicCamera camera;
     Rectangle platform;
@@ -34,7 +42,11 @@ public class GameScreen implements Screen {
     Rectangle brick;
     float xBallSpeed;
     float yBallSpeed;
+    Stage stage;
+    float explosionx;
+    float explosiony;
 
+    int level;
     int currentScore;
 
     public GameScreen(final BrickSmasher game){
@@ -42,11 +54,9 @@ public class GameScreen implements Screen {
         platformImage = new Texture(Gdx.files.internal("platform.png"));
         ballImage = new Texture(Gdx.files.internal("ball.png"));
         brickImage = new Texture(Gdx.files.internal("brick.png"));
-
-
-        bounceSound = Gdx.audio.newSound(Gdx.files.internal("bounceSound.wav"));
-        breakingBlockSound = Gdx.audio.newSound(Gdx.files.internal("breakingBlock.wav"));
-
+        blockDestruction = new ParticleEffect();
+        blockDestruction.load(Gdx.files.internal("sparks.p"), Gdx.files.internal("Effects"));
+        level = 1;
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 480);
@@ -57,20 +67,37 @@ public class GameScreen implements Screen {
         platform.width = 96;
         platform.height = 18;
 
-        // create the raindrops array and spawn the first raindrop
         bricks = new Array<Rectangle>();
-        spawnBricks();
 
         xBallSpeed = (-200);
         yBallSpeed = (-200);
 
         ball = spawnBall();
+        stage = new Stage(new ScreenViewport());
+        spawnBricks();
     }
 
     public void spawnBricks(){
         int i = 0;
         int j = 0;
-        while(j < 6){
+        int numrows = 2;
+        switch (level){
+            case 2:
+                numrows = 3;
+                break;
+            case 3:
+                numrows = 4;
+                break;
+            case 4:
+                numrows = 5;
+                break;
+            case 5:
+                numrows = 6;
+                break;
+            default:
+                break;
+        }
+        while(j < numrows){
             brick = new Rectangle();
             brick.x =50*i;
             brick.y = 420 - (30*j);
@@ -90,11 +117,14 @@ public class GameScreen implements Screen {
     @Override
     public void render (float delta) {
 
-        ScreenUtils.clear(0, 0, 0.2f, 1);
+        ScreenUtils.clear(0, 0, 0.1f, 1);
         camera.update();
 
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
+        game.font.getData().setScale(0.6f);
+        game.font.draw(game.batch, "Score:"+ currentScore, 10, 17);
+        game.font.draw(game.batch, "Level "+ level, 690, 17);
         game.batch.draw(platformImage, platform.x, platform.y, platform.width, platform.height);
         game.batch.draw(ballImage, ball.x, ball.y, ball.width, ball.height);
         for(Rectangle brick : bricks){
@@ -103,10 +133,19 @@ public class GameScreen implements Screen {
             }
         }
 
+        blockDestruction.setPosition(explosionx, explosiony);
+        blockDestruction.draw(game.batch, Math.min(Gdx.graphics.getDeltaTime(), 1/90f));
+
         game.batch.end();
 
         move(camera, platform);
         moveBall();
+
+        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        stage.draw();
+        if(bricks.size == 0){
+            game.setScreen(new NextLevelScreen(game, this));
+        }
     }
 
     public void move(Camera camera, Rectangle platform){
@@ -139,41 +178,67 @@ public class GameScreen implements Screen {
     }
 
     public void bounce(){
-        if(ball.x < 0 || ball.x > 800 - ball.width) {
-            bounceSound.play();
-            xBallSpeed = -xBallSpeed;
+        if(ball.x < 0) {
+            if(game.soundEnabled){
+                game.bounceSound.play(game.getSettings().getSoundVolume());
+            }
+            xBallSpeed = Math.abs(xBallSpeed);
+        }
+        if(ball.x > 800 - ball.width){
+            if(game.soundEnabled){
+                game.bounceSound.play(game.getSettings().getSoundVolume());
+            }
+            xBallSpeed = -Math.abs(xBallSpeed);
         }
         //Ball is approaching from left and hits left half of platform
         if(ball.overlaps(platform) && xBallSpeed > 0 &&  ball.x < platform.x + platform.width/2){
-            bounceSound.play();
+            if(game.soundEnabled){
+                game.bounceSound.play(game.getSettings().getSoundVolume());
+            }
             yBallSpeed = Math.abs(-yBallSpeed);
             xBallSpeed = -(platform.width/2 - (ball.x - platform.x)) * 10;
         }
         //Ball is approaching from right and hits left half of platform
         else if(ball.overlaps(platform) && xBallSpeed < 0  && ball.x < platform.x + platform.width/2){
-            bounceSound.play();
+            if(game.soundEnabled){
+                game.bounceSound.play(game.getSettings().getSoundVolume());
+            }
             yBallSpeed = Math.abs(-yBallSpeed);
             xBallSpeed = -((platform.width/2) - (ball.x - platform.x)) * 10;
         }
         //Ball is approaching from left and hits right half of platform
         else if(ball.overlaps(platform) && xBallSpeed > 0 && ball.x > platform.x + platform.width/2){
-            bounceSound.play();
+            if(game.soundEnabled){
+                game.bounceSound.play(game.getSettings().getSoundVolume());
+            }
             yBallSpeed = Math.abs(-yBallSpeed);
             xBallSpeed = (-platform.width/2 + (ball.x - platform.x)) * 10;
         }
         //Ball is approaching from right and hits right half of platform
         else if(ball.overlaps(platform) && xBallSpeed < 0 && ball.x > platform.x + platform.width/2){
-            bounceSound.play();
+            if(game.soundEnabled) {
+                game.bounceSound.play(game.getSettings().getSoundVolume());
+            }
             yBallSpeed = Math.abs(-yBallSpeed);
             xBallSpeed = (-platform.width/2 + (ball.x - platform.x)) * 10;
         }
         for (Iterator<Rectangle> iter = bricks.iterator(); iter.hasNext(); ) {
             Rectangle brick = iter.next();
             if(ball.overlaps(brick)){
-                breakingBlockSound.play();
-                yBallSpeed = (-brick.height/2 + (ball.y - brick.y)) * 10;;
-                xBallSpeed = (-brick.width/2 + (ball.x - brick.x)) * 10;
+                if(game.soundEnabled) {
+                    game.breakingBlockSound.play(game.getSettings().getSoundVolume());
+                }
+                if(!(ball.y+ball.height > brick.y + 4 && ball.y < brick.y + brick.height - 4)){
+                    yBallSpeed = (-brick.height/2 + (ball.y - brick.y)) * 10;
+                }
+                if(!(ball.x > brick.x + 4 && ball.x < brick.x + brick.width - 4)){
+                    xBallSpeed = -xBallSpeed;//(-brick.width/2 + (ball.x - brick.x)) * 10;
+                }
+                explosionx = brick.x + brick.width/2;
+                explosiony = brick.y + brick.height/2;
+                blockDestruction.start();
                 iter.remove();
+                currentScore += 10;
             }
         }
         //for(int i = 0; i < bricks.size; i++) {
@@ -192,12 +257,14 @@ public class GameScreen implements Screen {
         //}
 
         if(ball.y > 480 - ball.height){
-            bounceSound.play();
+            if(game.soundEnabled){
+                game.bounceSound.play(game.getSettings().getSoundVolume());
+            }
             yBallSpeed = -yBallSpeed;
         }
         if(ball.y + 64 < 0) {
             ball = spawnBall();
-            game.setScreen(new MainMenuScreen(game));
+            game.setScreen(new LoseScreen(game, currentScore));
         }
     }
 
@@ -207,6 +274,26 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
+        Gdx.input.setInputProcessor(stage);
+        Table table = new Table();
+        table.setFillParent(true);
+        table.top();
+        table.right();
+        table.padTop(-7);
+        table.padRight(-8);
+        stage.addActor(table);
+
+        Skin skin = new Skin(Gdx.files.internal("skin/neon-ui.json"));
+
+        TextButton menu = new TextButton("Menu", skin);
+        table.add(menu).width(65).height(45);
+        menu.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.setScreen(new MainMenuScreen(game));
+                dispose();
+            }
+        });
     }
 
     @Override
@@ -225,7 +312,5 @@ public class GameScreen implements Screen {
     public void dispose () {
         platformImage.dispose();
         ballImage.dispose();
-        bounceSound.dispose();
-        breakingBlockSound.dispose();
     }
 }

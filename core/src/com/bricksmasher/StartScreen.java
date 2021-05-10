@@ -26,14 +26,14 @@ public class StartScreen implements Screen{
 
     @Override
     public void render(float delta) {
-        ScreenUtils.clear(0, 0, 0.2f, 1);
+        ScreenUtils.clear(0, 0, 0.1f, 1);
 
         //camera.update();
         game.batch.setProjectionMatrix(camera.combined);
 
         game.batch.begin();
         game.font.draw(game.batch, "BRICKSMASHER", 230, 300);
-        game.font.draw(game.batch, "Tap anywhere to begin!", 130, 200);
+        game.font.draw(game.batch, "Click anywhere to begin!", 120, 200);
         game.batch.end();
 
         if (Gdx.input.isTouched()) {
