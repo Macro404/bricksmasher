@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
@@ -232,7 +233,7 @@ public class GameScreen implements Screen {
                     yBallSpeed = (-brick.height/2 + (ball.y - brick.y)) * 10;
                 }
                 if(!(ball.x > brick.x + 4 && ball.x < brick.x + brick.width - 4)){
-                    xBallSpeed = -xBallSpeed;//(-brick.width/2 + (ball.x - brick.x)) * 10;
+                    xBallSpeed = -xBallSpeed;
                 }
                 explosionx = brick.x + brick.width/2;
                 explosiony = brick.y + brick.height/2;
@@ -241,20 +242,6 @@ public class GameScreen implements Screen {
                 currentScore += 10;
             }
         }
-        //for(int i = 0; i < bricks.size; i++) {
-          //  if (bricks.get(i) != null && ball.overlaps(bricks.get(i))) {
-            //    breakingBlockSound.play();
-              //  yBallSpeed = -yBallSpeed;
-               // bricks.set(i, null);
-            //}
-        //}
-        //for(Rectangle brick : bricks) {
-          //  if (brick != null && ball.overlaps(brick)) {
-            //    breakingBlockSound.play();
-            //    yBallSpeed = -yBallSpeed;
-            //    brick = null;
-            //}
-        //}
 
         if(ball.y > 480 - ball.height){
             if(game.soundEnabled){
