@@ -82,28 +82,28 @@ public class GameScreen implements Screen {
     public void spawnBricks(){
         int i = 0;
         int j = 0;
-        int numrows = 2;
+        int numRows = 2;
         switch (level){
             case 1:
-                numrows = 2;
+                numRows = 2;
                 break;
             case 2:
-                numrows = 3;
+                numRows = 3;
                 break;
             case 3:
-                numrows = 4;
+                numRows = 4;
                 break;
             case 4:
-                numrows = 5;
+                numRows = 5;
                 break;
             case 5:
-                numrows = 6;
+                numRows = 6;
                 break;
             default:
-                numrows = 6;
+                numRows = 6;
                 break;
         }
-        while(j < numrows){
+        while(j < numRows){
             brick = new Rectangle();
             brick.x =50*i;
             brick.y = 420 - (30*j);
