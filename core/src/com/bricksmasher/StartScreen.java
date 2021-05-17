@@ -1,18 +1,22 @@
 package com.bricksmasher;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+/**
+ * The intro screen displayed when the game is launched
+ */
 public class StartScreen implements Screen{
     final BrickSmasher game;
     OrthographicCamera camera;
 
+    /**
+     * constructor for StartScreen
+     * @param game the game used throughout runtime
+     */
     public StartScreen(final BrickSmasher game){
-        //parent = game;
         this.game = game;
 
         camera = new OrthographicCamera();

@@ -2,16 +2,11 @@ package com.bricksmasher;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -22,11 +17,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.util.Iterator;
 
+/**
+ * Class containing the main game screen, where the in-game logic is executed.
+ *
+ * @author  Marcus Westlund, Patrik Johansson
+ */
 public class GameScreen implements Screen {
     final BrickSmasher game;
     GameScreen gameScreen = this;
@@ -51,13 +50,12 @@ public class GameScreen implements Screen {
     int level;
     int currentScore;
 
+    /**
+     * Constructor for the main GameScreen, use the same GameScreen until game over.
+     * @param game the game object created on app launch
+     */
     public GameScreen(final BrickSmasher game){
         this.game = game;
-        /*platformImage = new Texture(Gdx.files.internal("platform.png"));
-        ballImage = new Texture(Gdx.files.internal("ball.png"));
-        brickImage = new Texture(Gdx.files.internal("brick.png"));
-        blockDestruction = new ParticleEffect();
-        blockDestruction.load(Gdx.files.internal("sparks.p"), Gdx.files.internal("Effects"));*/
         level = 1;
 
         camera = new OrthographicCamera();
@@ -79,10 +77,13 @@ public class GameScreen implements Screen {
         spawnBricks();
     }
 
+    /**
+     * Spawns bricks in a number of rows depending on the level
+     */
     public void spawnBricks(){
         int i = 0;
         int j = 0;
-        int numRows = 2;
+        int numRows;
         switch (level){
             case 1:
                 numRows = 2;
@@ -157,6 +158,11 @@ public class GameScreen implements Screen {
         }
     }
 
+    /**
+     * Method responsible for moving the player platform
+     * @param camera object used throughout the class
+     * @param platform the Rectangle object to be controlled by the player
+     */
     public void move(Camera camera, Rectangle platform){
         if(Gdx.input.isTouched()) {
             Vector3 touchPos = new Vector3();
@@ -170,6 +176,10 @@ public class GameScreen implements Screen {
         if(platform.x > 800 - platform.width) platform.x = 800 - platform.width;
     }
 
+    /**
+     * Spawns a ball at a predetermined location
+     * @return the ball
+     */
     public Rectangle spawnBall(){
         Rectangle ball = new Rectangle();
 
@@ -179,6 +189,10 @@ public class GameScreen implements Screen {
         ball.y = 250;
         return ball;
     }
+
+    /**
+     * Function responsible for updating the balls location based on speed.
+     */
     public void moveBall(){
         ball.x += xBallSpeed * Gdx.graphics.getDeltaTime();
         ball.y += yBallSpeed * Gdx.graphics.getDeltaTime();
@@ -186,6 +200,9 @@ public class GameScreen implements Screen {
         bounce();
     }
 
+    /**
+     * Function responsible for the balls bouncing logic
+     */
     public void bounce(){
         if(ball.x < 0) {
             if(game.soundEnabled){

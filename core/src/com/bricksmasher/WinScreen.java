@@ -11,11 +11,21 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+/**
+ * The screen that is displayed when a player beats all the main levels.
+ */
 public class WinScreen implements Screen {
     int score;
     Stage stage;
     BrickSmasher game;
     GameScreen gameScreen;
+
+    /**
+     * Constructor for WinScreen
+     * @param game the game used throughout runtime
+     * @param score the current score to be displayed
+     * @param gameScreen the active GameScreen
+     */
     public WinScreen(BrickSmasher game, int score, GameScreen gameScreen){
         this.game = game;
         this.score = score;

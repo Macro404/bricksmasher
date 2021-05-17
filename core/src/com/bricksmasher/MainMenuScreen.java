@@ -2,7 +2,6 @@ package com.bricksmasher;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -10,13 +9,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.Game;
 
+/**
+ * The main menu screen
+ */
 public class MainMenuScreen implements Screen{
     final BrickSmasher game;
-    OrthographicCamera camera;
 
     private SettingsScreen settingsScreen;
     private MainMenuScreen mainMenuScreen;
@@ -29,9 +28,11 @@ public class MainMenuScreen implements Screen{
     public final static int GAME = 2;
     public final static int CONTINUE = 3;
 
-
-
-
+    /**
+     * constructor for MainMenuScreen
+     * @param game the game used throughout runtime
+     * @param gameScreen the active gamescreen, sending a new gamescreen to this class will override previous progress
+     */
     public MainMenuScreen(final BrickSmasher game, GameScreen gameScreen){
         this.game = game;
         this.gameScreen = gameScreen;
@@ -48,6 +49,10 @@ public class MainMenuScreen implements Screen{
 
     }
 
+    /**
+     * Controls the logic to swap screens in the menu
+     * @param screen the button that is clicked
+     */
     public void changeScreen(int screen){
         switch(screen){
             case CONTINUE:
