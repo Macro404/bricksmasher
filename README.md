@@ -7,6 +7,7 @@
 Installation: To compile an executable jar-file you need JDK 15 or below, it will not compile in JDK16.
  * Open the project in an IDE with gradle integration.
  * In the IDE terminal, type 'gradlew desktop:dist'
+ * You will find the executable jar-file under bricksmasher\desktop\build\libs\
 
 
 Bricksmasher is built using the libGDX framework. This is a gradle project.
