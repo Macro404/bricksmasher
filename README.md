@@ -3,6 +3,7 @@
  tries to direct a ball to destroy the blocks at the top of the screen by hitting them. Each block destroyed increases the players score. 
  If the ball reaches the bottom of the screen without the player catching it, the player loses the game. 
  The player wins the game when they clear all blocks on the 5 levels currently in the game without failing to catch the ball.
+
  ![image info](/Screenshots/main_menu.png)
  ![image info](/Screenshots/game.png)
  ![image info](/Screenshots/level_complete.png)
