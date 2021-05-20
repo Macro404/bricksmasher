@@ -2,7 +2,6 @@ package com.bricksmasher;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
@@ -16,8 +15,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
 
+/**
+ * The settings screen
+ */
 public class SettingsScreen implements Screen{
     private BrickSmasher parent;
     private Stage stage;
@@ -30,6 +31,11 @@ public class SettingsScreen implements Screen{
     private MainMenuScreen mainMenuScreen;
     GameScreen gameScreen;
 
+    /**
+     * constructor for SettingsScreen
+     * @param game the game used throughout runtime
+     * @param gameScreen the active GameScreen
+     */
     public SettingsScreen(BrickSmasher game, GameScreen gameScreen){
         parent = game;
         this.gameScreen = gameScreen;

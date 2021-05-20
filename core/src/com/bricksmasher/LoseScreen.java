@@ -11,10 +11,19 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+/**
+ * The screen displayed when a player loses
+ */
 public class LoseScreen implements Screen {
     int score;
     BrickSmasher game;
     Stage stage;
+
+    /**
+     * Constructor for LoseScreen
+     * @param game the game used throughout runtime
+     * @param score the achieved score
+     */
     public LoseScreen(BrickSmasher game, int score){
         this.score = score;
         this.game = game;

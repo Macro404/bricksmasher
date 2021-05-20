@@ -11,11 +11,19 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+/**
+ * The screen displayed when a level is beaten
+ */
 public class NextLevelScreen implements Screen {
     BrickSmasher game;
     GameScreen gameScreen;
     Stage stage;
 
+    /**
+     * constructor for NextLevelScreen
+     * @param game the game used throughout runtime
+     * @param gameScreen the active GameScreen
+     */
     public NextLevelScreen(BrickSmasher game, GameScreen gameScreen){
         this.game = game;
         this.gameScreen = gameScreen;
