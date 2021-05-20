@@ -4,7 +4,9 @@
  If the ball reaches the bottom of the screen without the player catching it, the player loses the game. 
  The player wins the game when able to clear all blocks on the 5 created levels without failing to catch the ball.
 
-Installation: To be continued...
+Installation: To compile an executable jar-file you need JDK 15 or below, it will not compile in JDK16.
+ * Open the project in an IDE with gradle integration.
+ * In the IDE terminal, type 'gradlew desktop:dist'
 
 
 Bricksmasher is built using the libGDX framework. This is a gradle project.
